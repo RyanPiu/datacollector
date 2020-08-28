@@ -37,6 +37,7 @@ import com.streamsets.pipeline.stage.processor.kv.LookupUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +112,7 @@ public class MongoDBProcessor extends SingleLaneRecordProcessor {
       // if record doesn't have a field specified in the mapping, or value is null,
       // exclude the field from filter, instead of sending to error.
       if (record.has(mapping.sdcField) && record.get(mapping.sdcField) != null) {
-        query.append(mapping.keyName, record.get(mapping.sdcField).getValue());
+        query.append(mapping.keyName, new ObjectId(record.get(mapping.sdcField).getValue().toString().getBytes()));
       }
     }
     // If all of the filters are missing in record, we cannot perform lookup.
